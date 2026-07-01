@@ -3,15 +3,30 @@ estoque = {}
 def adicionar_item():
     print("Adicionando item...")
     produto = input("\nNome do produto: ")
-    qtd = input("\nQuantidade: ")
-    estoque[produto] = qtd
+    qtd = int(input("\nQuantidade: "))
+    
+    if produto in estoque:
+        estoque[produto] += qtd
+    else:
+        estoque[produto] = qtd
 
 def registrar_venda():
     print("Registrando venda...")
+    produto = input("\nNome do produto vendido: ")
+
+    if produto in estoque:
+        qtd_vendida = int(input("Quantidade vendida: "))
+        
+        if estoque[produto] >= qtd_vendida:
+            estoque[produto] -= qtd_vendida
+            print("\nVenda registrada com sucesso")
+        else:
+            print("\nERRO: Quantidade insuficiente no estoque")
+    else:
+        print("\nERRO: Produto não encontrado")
 
 def listar_estoque():
     print(estoque)
-
 
 while True:
     print("""
