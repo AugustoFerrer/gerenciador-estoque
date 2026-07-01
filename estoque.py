@@ -26,7 +26,10 @@ def registrar_venda():
         print("\nERRO: Produto não encontrado")
 
 def listar_estoque():
-    print(estoque)
+    print("\n--- ESTOQUE ATUAL ---")
+    for produto, qtd in estoque.items():
+        print(f"Produto: {produto} | Quantidade: {qtd}")
+    print("---------------------")
 
 while True:
     print("""
