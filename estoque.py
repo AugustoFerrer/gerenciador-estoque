@@ -1,35 +1,81 @@
 estoque = {}
+tamanhos_disponiveis = ["solteiro", "casal", "queen", "king"]
+
 
 def adicionar_item():
     print("Adicionando item...")
-    produto = input("\nNome do produto: ")
-    qtd = int(input("\nQuantidade: "))
+    produto = input("\nNome do produto: ").lower()
+    tamanho = input("\nTamanho: ").lower()
+    if tamanho in tamanhos_disponiveis:
+        
+        cor = input("\nCor: ").lower()
+        caracteristicas = (tamanho, cor) 
+        qtd = int(input("\nQuantidade: "))
+
+        if produto not in estoque:
+            estoque[produto] = {}
+
+        if caracteristicas in estoque[produto]:
+            estoque[produto][caracteristicas] += qtd
+        else:
+            estoque[produto][caracteristicas] = qtd
     
-    if produto in estoque:
-        estoque[produto] += qtd
     else:
-        estoque[produto] = qtd
+        print("\nERRO: Tamanho não encontrado")
+
+
 
 def registrar_venda():
     print("Registrando venda...")
-    produto = input("\nNome do produto vendido: ")
+    produto = input("\nNome do produto vendido: ").lower()
 
     if produto in estoque:
-        qtd_vendida = int(input("Quantidade vendida: "))
         
-        if estoque[produto] >= qtd_vendida:
-            estoque[produto] -= qtd_vendida
-            print("\nVenda registrada com sucesso")
+        tamanho = input("\nTamanho: ").lower()    
+        cor = input("\nCor: ").lower()
+        caracteristicas = (tamanho, cor)
+
+        if caracteristicas in estoque[produto]:
+                
+                qtd_vendida = int(input("\nQuantidade vendida: "))
+                
+                if estoque[produto][caracteristicas] >= qtd_vendida:
+                    estoque[produto][caracteristicas] -= qtd_vendida
+                    print("\nVenda registrada com sucesso")
+                else:
+                    print("\nERRO: Quantidade insuficiente no estoque")
+        
         else:
-            print("\nERRO: Quantidade insuficiente no estoque")
+            print("\nERRO: Modelo não encontrado")
+
     else:
         print("\nERRO: Produto não encontrado")
 
+
+
 def listar_estoque():
     print("\n--- ESTOQUE ATUAL ---")
-    for produto, qtd in estoque.items():
-        print(f"Produto: {produto} | Quantidade: {qtd}")
+    
+    #.items() só recebe 2 variaveis pra separar, então tive que fazer um for dentro de outro pra extrair o dicionario interno (informacoes)
+
+    for produto, informacoes in estoque.items():
+        
+    # Nesse momento:
+    # produto = "Ravenna"
+    # informacoes = {("Casal", "Branco"): 10} <--- O Python guardou o dicionário de dentro aqui!  
+    
+        for caracteristicas, qtd in informacoes.items():
+    
+        # caracteristicas = ("Casal", "Branco")
+        # qtd = 10
+    
+            tamanho = caracteristicas[0]
+            cor = caracteristicas[1]
+
+            print(f"Produto: {produto} | Tamanho: {tamanho} | Cor: {cor} | Quantidade: {qtd}")
     print("---------------------")
+
+
 
 while True:
     print("""
