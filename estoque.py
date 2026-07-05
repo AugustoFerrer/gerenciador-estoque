@@ -42,6 +42,9 @@ def registrar_venda():
                 if estoque[produto][caracteristicas] >= qtd_vendida:
                     estoque[produto][caracteristicas] -= qtd_vendida
                     print("\nVenda registrada com sucesso")
+
+                    if estoque[produto][caracteristicas] <= 5:
+                        print("ATENÇÃO: Estoque baixo para este modelo!")
                 else:
                     print("\nERRO: Quantidade insuficiente no estoque")
         
