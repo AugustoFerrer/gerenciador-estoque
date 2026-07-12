@@ -1,27 +1,56 @@
 estoque = {}
 tamanhos_disponiveis = ["solteiro", "casal", "queen", "king"]
 
-
 def adicionar_item():
     print("Adicionando item...")
-    produto = input("\nNome do produto: ").lower()
-    tamanho = input("\nTamanho: ").lower()
-    if tamanho in tamanhos_disponiveis:
-        
-        cor = input("\nCor: ").lower()
-        caracteristicas = (tamanho, cor) 
-        qtd = int(input("\nQuantidade: "))
-
-        if produto not in estoque:
-            estoque[produto] = {}
-
-        if caracteristicas in estoque[produto]:
-            estoque[produto][caracteristicas] += qtd
-        else:
-            estoque[produto][caracteristicas] = qtd
+    tipo = input("\nTipo do produto (Ex: Colchão, Base, Baú, Travesseiro...): ").lower()
     
-    else:
-        print("\nERRO: Tamanho não encontrado")
+    if tipo == "colchão":
+        
+        produto = input("\nNome do produto: ").lower()
+        tamanho = input("\nTamanho: ").lower()
+        if tamanho in tamanhos_disponiveis:
+            
+            qtd = int(input("\nQuantidade: "))
+
+            if produto not in estoque:
+                estoque[produto] = {}
+
+            if tamanho not in estoque[produto]:
+                estoque[produto][tamanho] = qtd
+            else:
+                estoque[produto][tamanho] += qtd
+    
+        else:
+            print("\nERRO: Tamanho não encontrado")
+
+    elif tipo == "base":
+
+        produto = input("\nNome do produto: ").lower()
+        tamanho = input("\nTamanho: ").lower()
+        if tamanho in tamanhos_disponiveis:
+
+            cor = input("Cor: ").lower() 
+            qtd = int(input("\nQuantidade: "))
+
+            if produto not in estoque:
+                estoque[produto] = {}
+
+            if tamanho not in estoque[produto]:
+                estoque[produto][tamanho] = {}
+            
+            if cor not in estoque[produto][tamanho]:
+                estoque[produto][tamanho][cor] = qtd
+            else:
+                estoque[produto][tamanho][cor] += qtd
+    
+        else:
+            print("\nERRO: Tamanho não encontrado")
+
+    
+
+
+
 
 
 
