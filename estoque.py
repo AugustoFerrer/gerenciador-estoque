@@ -1,14 +1,27 @@
+import unicodedata
+
 estoque = {}
 tamanhos_disponiveis = ["solteiro", "casal", "queen", "king"]
 
+
+def limpar_texto(texto):
+    texto_limpo = texto.strip().lower()
+    
+    texto_limpo = unicodedata.normalize('NFKD', texto_limpo)
+    
+    texto_limpo = texto_limpo.encode('ascii', 'ignore').decode('utf-8')
+    
+    return texto_limpo
+
+
 def adicionar_item():
     print("Adicionando item...")
-    tipo = input("\nTipo do produto (Ex: Colchão, Base, Baú, Travesseiro...): ").lower()
+    tipo = limpar_texto(input("\nTipo do produto (Ex: Colchão, Base, Baú, Travesseiro...): "))
     
     if tipo == "colchão":
         
-        produto = input("\nNome do produto: ").lower()
-        tamanho = input("\nTamanho: ").lower()
+        produto = limpar_texto(input("\nNome do produto: "))
+        tamanho = limpar_texto(input("\nTamanho: "))
         if tamanho in tamanhos_disponiveis:
             
             qtd = int(input("\nQuantidade: "))
@@ -26,11 +39,11 @@ def adicionar_item():
 
     elif tipo == "base":
 
-        produto = input("\nNome do produto: ").lower()
-        tamanho = input("\nTamanho: ").lower()
+        produto = limpar_texto(input("\nNome do produto: "))
+        tamanho = limpar_texto(input("\nTamanho: "))
         if tamanho in tamanhos_disponiveis:
 
-            cor = input("Cor: ").lower() 
+            cor = limpar_texto(input("Cor: "))
             qtd = int(input("\nQuantidade: "))
 
             if produto not in estoque:
@@ -56,12 +69,12 @@ def adicionar_item():
 
 def registrar_venda():
     print("Registrando venda...")
-    produto = input("\nNome do produto vendido: ").lower()
+    produto = limpar_texto(input("\nNome do produto vendido: "))
 
     if produto in estoque:
         
-        tamanho = input("\nTamanho: ").lower()    
-        cor = input("\nCor: ").lower()
+        tamanho = limpar_texto(input("\nTamanho: "))  
+        cor = limpar_texto(input("\nCor: "))
         caracteristicas = (tamanho, cor)
 
         if caracteristicas in estoque[produto]:
