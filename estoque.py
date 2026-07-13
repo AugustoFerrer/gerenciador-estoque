@@ -15,101 +15,71 @@ def limpar_texto(texto):
 
 def adicionar_item():
     print("Adicionando item...")
+
+    ficha_infos = {}
     
     tipo = limpar_texto(input("\nTipo do produto (Ex: Colchão, Base, Baú, Travesseiro...): "))
-    # verificar tipo
     produto = limpar_texto(input("\nNome do produto: "))
+    tamanho = limpar_texto(input("\nTamanho: "))
+
     if produto not in estoque:
         estoque[produto] = {}
 
-    if tipo == "colchao":
-        
-        tamanho = limpar_texto(input("\nTamanho: "))
-        
-        if tamanho in tamanhos_disponiveis:
-            
-            qtd = int(input("\nQuantidade: "))
-
-            if tamanho not in estoque[produto]:
-                estoque[produto][tamanho] = { "Quantidade": qtd }
-            else:
-                estoque[produto][tamanho]["Quantidade"] += qtd
+    if tamanho not in tamanhos_disponiveis:
+        print("\nERRO: Tamanho não encontrado")
+        return
     
-        else:
-            print("\nERRO: Tamanho não encontrado")
+    else:    
+        if tipo == "colchao":
+            pass
 
-    elif tipo == "base":
+        elif tipo == "base":
+            ficha_infos["cor"] = limpar_texto(input("Cor: "))
 
-        tamanho = limpar_texto(input("\nTamanho: "))
-        
-        if tamanho in tamanhos_disponiveis:
+        elif tipo in ["bau", "cabeceira"]:
+            ficha_infos["cor"] = limpar_texto(input("Cor: "))
+            ficha_infos["material"] = limpar_texto(input("\nMaterial: "))
 
-            cor = limpar_texto(input("Cor: "))
-            qtd = int(input("\nQuantidade: "))
+    qtd = int(input("Quantidade"))
+    ficha_infos["qtd"] = qtd
 
-            if tamanho not in estoque[produto]:
-                estoque[produto][tamanho] = { "Cor": cor, "Quantidade": qtd }
-            else:
-                estoque[produto][tamanho]["Quantidade"] += qtd
+    if tamanho not in estoque[produto]:
+         estoque[produto][tamanho] = ficha_infos
+    else:
+        estoque[produto][tamanho]["qtd"] += qtd
     
-        else:
-            print("\nERRO: Tamanho não encontrado")
-
-    elif tipo in ["bau", "cabeceira"]:
-
-        tamanho = limpar_texto(input("\nTamanho: "))
-        
-        if tamanho in tamanhos_disponiveis:
-
-            cor = limpar_texto(input("Cor: "))
-            material = limpar_texto(input("\nMaterial: "))
-            qtd = int(input("\nQuantidade: "))
-
-            if tamanho not in estoque[produto]:
-                estoque[produto][tamanho] = { "Cor": cor, "Material": material, "Quantidade": qtd }
-            else:
-                estoque[produto][tamanho]["Quantidade"] += qtd
-    
-        else:
-            print("\nERRO: Tamanho não encontrado")
-
-
-
-    
-
-
-
-
+    return
 
 
 def registrar_venda():
     print("Registrando venda...")
     produto = limpar_texto(input("\nNome do produto vendido: "))
 
-    if produto in estoque:
-        
+    if produto not in estoque:
+        print("\nERRO: Produto não encontrado")
+        return
+    else:
         tamanho = limpar_texto(input("\nTamanho: "))  
         cor = limpar_texto(input("\nCor: "))
         caracteristicas = (tamanho, cor)
 
-        if caracteristicas in estoque[produto]:
-                
-                qtd_vendida = int(input("\nQuantidade vendida: "))
-                
-                if estoque[produto][caracteristicas] >= qtd_vendida:
-                    estoque[produto][caracteristicas] -= qtd_vendida
-                    print("\nVenda registrada com sucesso")
-
-                    if estoque[produto][caracteristicas] <= 5:
-                        print("ATENÇÃO: Estoque baixo para este modelo!")
-                else:
-                    print("\nERRO: Quantidade insuficiente no estoque")
-        
-        else:
+        if caracteristicas not in estoque[produto]:
             print("\nERRO: Modelo não encontrado")
+            return
+        else:    
+            qtd_vendida = int(input("\nQuantidade vendida: "))
+            
+            if estoque[produto][caracteristicas] < qtd_vendida:
+                print("\nERRO: Quantidade insuficiente no estoque")
+                return
+            else:
+                estoque[produto][caracteristicas] -= qtd_vendida
+                print("\nVenda registrada com sucesso")
 
-    else:
-        print("\nERRO: Produto não encontrado")
+                if estoque[produto][caracteristicas] <= 5:
+                    print("ATENÇÃO: Estoque baixo para este modelo!")
+    return
+
 
 
 
@@ -134,6 +104,8 @@ def listar_estoque():
 
             print(f"Produto: {produto} | Tamanho: {tamanho} | Cor: {cor} | Quantidade: {qtd}")
     print("---------------------")
+
+    return
 
 
 
