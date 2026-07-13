@@ -3,7 +3,6 @@ import unicodedata
 estoque = {}
 tamanhos_disponiveis = ["solteiro", "casal", "queen", "king"]
 
-
 def limpar_texto(texto):
     texto_limpo = texto.strip().lower()
     
@@ -16,12 +15,14 @@ def limpar_texto(texto):
 
 def adicionar_item():
     print("Adicionando item...")
-    tipo = limpar_texto(input("\nTipo do produto (Ex: Colchão, Base, Baú, Travesseiro...): "))
     
-    if tipo == "colchão":
+    tipo = limpar_texto(input("\nTipo do produto (Ex: Colchão, Base, Baú, Travesseiro...): "))
+    produto = limpar_texto(input("\nNome do produto: "))
+
+    if tipo == "colchao":
         
-        produto = limpar_texto(input("\nNome do produto: "))
         tamanho = limpar_texto(input("\nTamanho: "))
+        
         if tamanho in tamanhos_disponiveis:
             
             qtd = int(input("\nQuantidade: "))
@@ -30,17 +31,17 @@ def adicionar_item():
                 estoque[produto] = {}
 
             if tamanho not in estoque[produto]:
-                estoque[produto][tamanho] = qtd
+                estoque[produto][tamanho] = { "Quantidade": qtd }
             else:
-                estoque[produto][tamanho] += qtd
+                estoque[produto][tamanho]["Quantidade"] += qtd
     
         else:
             print("\nERRO: Tamanho não encontrado")
 
     elif tipo == "base":
 
-        produto = limpar_texto(input("\nNome do produto: "))
         tamanho = limpar_texto(input("\nTamanho: "))
+        
         if tamanho in tamanhos_disponiveis:
 
             cor = limpar_texto(input("Cor: "))
@@ -50,15 +51,35 @@ def adicionar_item():
                 estoque[produto] = {}
 
             if tamanho not in estoque[produto]:
-                estoque[produto][tamanho] = {}
-            
-            if cor not in estoque[produto][tamanho]:
-                estoque[produto][tamanho][cor] = qtd
+                estoque[produto][tamanho] = { "Cor": cor, "Quantidade": qtd }
             else:
-                estoque[produto][tamanho][cor] += qtd
+                estoque[produto][tamanho]["Quantidade"] += qtd
     
         else:
             print("\nERRO: Tamanho não encontrado")
+
+    elif tipo in ["bau", "cabeceira"]:
+
+        tamanho = limpar_texto(input("\nTamanho: "))
+        
+        if tamanho in tamanhos_disponiveis:
+
+            cor = limpar_texto(input("Cor: "))
+            material = limpar_texto(input("\nMaterial: "))
+            qtd = int(input("\nQuantidade: "))
+
+            if produto not in estoque:
+                estoque[produto] = {}
+
+            if tamanho not in estoque[produto]:
+                estoque[produto][tamanho] = { "Cor": cor, "Material": material, "Quantidade": qtd }
+            else:
+                estoque[produto][tamanho]["Quantidade"] += qtd
+    
+        else:
+            print("\nERRO: Tamanho não encontrado")
+
+
 
     
 
