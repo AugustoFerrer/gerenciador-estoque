@@ -17,7 +17,10 @@ def adicionar_item():
     print("Adicionando item...")
     
     tipo = limpar_texto(input("\nTipo do produto (Ex: Colchão, Base, Baú, Travesseiro...): "))
+    # verificar tipo
     produto = limpar_texto(input("\nNome do produto: "))
+    if produto not in estoque:
+        estoque[produto] = {}
 
     if tipo == "colchao":
         
@@ -26,9 +29,6 @@ def adicionar_item():
         if tamanho in tamanhos_disponiveis:
             
             qtd = int(input("\nQuantidade: "))
-
-            if produto not in estoque:
-                estoque[produto] = {}
 
             if tamanho not in estoque[produto]:
                 estoque[produto][tamanho] = { "Quantidade": qtd }
@@ -47,9 +47,6 @@ def adicionar_item():
             cor = limpar_texto(input("Cor: "))
             qtd = int(input("\nQuantidade: "))
 
-            if produto not in estoque:
-                estoque[produto] = {}
-
             if tamanho not in estoque[produto]:
                 estoque[produto][tamanho] = { "Cor": cor, "Quantidade": qtd }
             else:
@@ -67,9 +64,6 @@ def adicionar_item():
             cor = limpar_texto(input("Cor: "))
             material = limpar_texto(input("\nMaterial: "))
             qtd = int(input("\nQuantidade: "))
-
-            if produto not in estoque:
-                estoque[produto] = {}
 
             if tamanho not in estoque[produto]:
                 estoque[produto][tamanho] = { "Cor": cor, "Material": material, "Quantidade": qtd }
