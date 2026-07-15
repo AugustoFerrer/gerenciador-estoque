@@ -2,6 +2,7 @@ import unicodedata
 
 estoque = {}
 tamanhos_disponiveis = ["solteiro", "casal", "queen", "king"]
+tipos_disponiveis = ["colchao", "base", "bau", "travesseiro", "cabeceira", "guarda roupa"]
 
 def limpar_texto(texto):
     texto_limpo = texto.strip().lower()
@@ -9,6 +10,8 @@ def limpar_texto(texto):
     texto_limpo = unicodedata.normalize('NFKD', texto_limpo)
     
     texto_limpo = texto_limpo.encode('ascii', 'ignore').decode('utf-8')
+
+    texto_limpo = texto_limpo.replace("-", " ")
     
     return texto_limpo
 
@@ -19,16 +22,19 @@ def adicionar_item():
     ficha_infos = {}
     
     tipo = limpar_texto(input("\nTipo do produto (Ex: Colchão, Base, Baú, Travesseiro...): "))
+    if tipo not in tipos_disponiveis:
+        print("\nERRO: Tipo não encontrado")
+        return    
+    
     produto = limpar_texto(input("\nNome do produto: "))
-    tamanho = limpar_texto(input("\nTamanho: "))
 
+    tamanho = limpar_texto(input("\nTamanho: "))
+    if tamanho not in tamanhos_disponiveis:
+            print("\nERRO: Tamanho não encontrado")
+            return
+        
     if produto not in estoque:
         estoque[produto] = {}
-
-    if tamanho not in tamanhos_disponiveis:
-        print("\nERRO: Tamanho não encontrado")
-        return
-    
     else:    
         if tipo == "colchao":
             pass
