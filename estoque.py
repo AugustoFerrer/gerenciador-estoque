@@ -25,7 +25,8 @@ def adicionar_item():
     tipo = limpar_texto(input("\nTipo do produto (Ex: Colchão, Base, Baú, Travesseiro...): "))
     if tipo not in tipos_disponiveis:
         print("\nERRO: Tipo não encontrado")
-        return    
+        return
+    ficha_infos["tipo"] = tipo   
     
     produto = limpar_texto(input("\nNome do produto: "))
 
@@ -44,17 +45,17 @@ def adicionar_item():
         pass
 
     elif tipo == "base":
-        ficha_infos["cor"] = limpar_texto(input("Cor: "))
+        ficha_infos["cor"] = limpar_texto(input("\nCor: "))
 
     elif tipo in ("bau", "cabeceira"):
-        ficha_infos["cor"] = limpar_texto(input("Cor: "))
+        ficha_infos["cor"] = limpar_texto(input("\nCor: "))
         ficha_infos["material"] = limpar_texto(input("\nMaterial: "))
 
     elif tipo == "guarda roupa":
-        ficha_infos["cor"] = limpar_texto(input("Cor: "))
-        ficha_infos["qtd_portas"] = limpar_texto(input("Quantidade de portas: "))
+        ficha_infos["cor"] = limpar_texto(input("\nCor: "))
+        ficha_infos["qtd_portas"] = limpar_texto(input("\nQuantidade de portas: "))
        
-    qtd = int(input("Quantidade"))
+    qtd = int(input("\nQuantidade: "))
     ficha_infos["qtd"] = qtd
 
     if tamanho not in estoque[produto]:
@@ -103,21 +104,18 @@ def listar_estoque():
     
     #.items() só recebe 2 variaveis pra separar, então tive que fazer um for dentro de outro pra extrair o dicionario interno (informacoes)
 
-    for produto, informacoes in estoque.items():
+    for produto, tamanho in estoque.items():
         
     # Nesse momento:
-    # produto = "Ravenna"
-    # informacoes = {("Casal", "Branco"): 10} <--- O Python guardou o dicionário de dentro aqui!  
+    # produto = "bau"
+    # tamanho = ("casal" : ficha_infos) <--- O Python guardou o dicionário de dentro aqui!  
     
-        for caracteristicas, qtd in informacoes.items():
+        for tamanho, ficha in tamanho.items():
     
-        # caracteristicas = ("Casal", "Branco")
-        # qtd = 10
+        # tamanho = "Casal"
+        # ficha = (ficha_infos)
     
-            tamanho = caracteristicas[0]
-            cor = caracteristicas[1]
-
-            print(f"Produto: {produto} | Tamanho: {tamanho} | Cor: {cor} | Quantidade: {qtd}")
+            print(f"produto: {produto} | tamanho: {tamanho} | {ficha}")
     print("---------------------")
 
     return
