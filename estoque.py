@@ -16,6 +16,7 @@ def limpar_texto(texto):
     return texto_limpo
 
 
+
 def adicionar_item():
     print("Adicionando item...")
 
@@ -28,24 +29,31 @@ def adicionar_item():
     
     produto = limpar_texto(input("\nNome do produto: "))
 
-    tamanho = limpar_texto(input("\nTamanho: "))
-    if tamanho not in tamanhos_disponiveis:
-            print("\nERRO: Tamanho não encontrado")
-            return
+    if tipo in ("travesseiro", "guarda roupa"):
+        tamanho = "unico"
+    else:
+        tamanho = limpar_texto(input("\nTamanho: "))
+        if tamanho not in tamanhos_disponiveis:
+                print("\nERRO: Tamanho não encontrado")
+                return
         
     if produto not in estoque:
         estoque[produto] = {}
-    else:    
-        if tipo == "colchao":
-            pass
+    
+    if tipo in ("colchao", "travesseiro"):
+        pass
 
-        elif tipo == "base":
-            ficha_infos["cor"] = limpar_texto(input("Cor: "))
+    elif tipo == "base":
+        ficha_infos["cor"] = limpar_texto(input("Cor: "))
 
-        elif tipo in ["bau", "cabeceira"]:
-            ficha_infos["cor"] = limpar_texto(input("Cor: "))
-            ficha_infos["material"] = limpar_texto(input("\nMaterial: "))
+    elif tipo in ("bau", "cabeceira"):
+        ficha_infos["cor"] = limpar_texto(input("Cor: "))
+        ficha_infos["material"] = limpar_texto(input("\nMaterial: "))
 
+    elif tipo == "guarda roupa":
+        ficha_infos["cor"] = limpar_texto(input("Cor: "))
+        ficha_infos["qtd_portas"] = limpar_texto(input("Quantidade de portas: "))
+       
     qtd = int(input("Quantidade"))
     ficha_infos["qtd"] = qtd
 
@@ -55,6 +63,7 @@ def adicionar_item():
         estoque[produto][tamanho]["qtd"] += qtd
     
     return
+
 
 
 def registrar_venda():
