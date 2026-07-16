@@ -1,8 +1,10 @@
 import unicodedata
 
+historico_vendas = {}
 estoque = {}
 tamanhos_disponiveis = ["solteiro", "casal", "queen", "king"]
 tipos_disponiveis = ["colchao", "base", "bau", "travesseiro", "cabeceira", "guarda roupa"]
+
 
 def limpar_texto(texto):
     texto_limpo = texto.strip().lower()
@@ -53,7 +55,7 @@ def adicionar_item():
 
     elif tipo == "guarda roupa":
         ficha_infos["cor"] = limpar_texto(input("\nCor: "))
-        ficha_infos["qtd_portas"] = limpar_texto(input("\nQuantidade de portas: "))
+        ficha_infos["portas"] = limpar_texto(input("\nQuantidade de portas: "))
        
     qtd = int(input("\nQuantidade: "))
     ficha_infos["qtd"] = qtd
@@ -64,39 +66,6 @@ def adicionar_item():
         estoque[produto][tamanho]["qtd"] += qtd
     
     return
-
-
-
-def registrar_venda():
-    print("Registrando venda...")
-    produto = limpar_texto(input("\nNome do produto vendido: "))
-
-    if produto not in estoque:
-        print("\nERRO: Produto não encontrado")
-        return
-    else:
-        tamanho = limpar_texto(input("\nTamanho: "))  
-        cor = limpar_texto(input("\nCor: "))
-        caracteristicas = (tamanho, cor)
-
-        if caracteristicas not in estoque[produto]:
-            print("\nERRO: Modelo não encontrado")
-            return
-        else:    
-            qtd_vendida = int(input("\nQuantidade vendida: "))
-            
-            if estoque[produto][caracteristicas] < qtd_vendida:
-                print("\nERRO: Quantidade insuficiente no estoque")
-                return
-            else:
-                estoque[produto][caracteristicas] -= qtd_vendida
-                print("\nVenda registrada com sucesso")
-
-                if estoque[produto][caracteristicas] <= 5:
-                    print("ATENÇÃO: Estoque baixo para este modelo!")
-    return
-
-
 
 
 def listar_estoque():
@@ -111,15 +80,54 @@ def listar_estoque():
     # tamanho = ("casal" : ficha_infos) <--- O Python guardou o dicionário de dentro aqui!  
     
         for tamanho, ficha in tamanho.items():
+
+            tipo = ficha["tipo"]
+            cor = ficha.get("cor", "")
+            material = ficha.get("material", "")
+            portas = ficha.get("portas", "")   
     
         # tamanho = "Casal"
         # ficha = (ficha_infos)
     
-            print(f"produto: {produto} | tamanho: {tamanho} | {ficha}")
-    print("---------------------")
+    #         print(f"produto: {produto} | tamanho: {tamanho} | {ficha}")
+    # print("---------------------")
 
     return
 
+
+def registrar_venda():
+    print("Registrando venda...")
+    
+    id = limpar_texto(input("\nID da venda: "))
+    if id in historico_vendas:
+        print("\nERRO: ID já existente")
+        return
+    
+    produto = limpar_texto(input("\nNome do produto vendido: "))
+    if produto not in estoque:
+        print("\nERRO: Produto não encontrado")
+        return
+    
+    tamanho = limpar_texto(input("\nTamanho: "))  
+    cor = limpar_texto(input("\nCor: "))
+    caracteristicas = (tamanho, cor)
+
+    if caracteristicas not in estoque[produto]:
+        print("\nERRO: Modelo não encontrado")
+        return
+    else:    
+        qtd_vendida = int(input("\nQuantidade vendida: "))
+        
+        if estoque[produto][caracteristicas] < qtd_vendida:
+            print("\nERRO: Quantidade insuficiente no estoque")
+            return
+        else:
+            estoque[produto][caracteristicas] -= qtd_vendida
+            print("\nVenda registrada com sucesso")
+
+            if estoque[produto][caracteristicas] <= 5:
+                print("ATENÇÃO: Estoque baixo para este modelo!")
+    return
 
 
 while True:
