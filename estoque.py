@@ -1,3 +1,5 @@
+# SEPARAR EM OUTROS ARQUIVOS .py
+
 import unicodedata
 
 historico_vendas = {}
@@ -29,6 +31,8 @@ def adicionar_item():
         print("\nERRO: Tipo não encontrado")
         return
     ficha_infos["tipo"] = tipo   
+
+    # MUDAR ARMAZENAMENTO DE CARACTERISTICAS PRA UM SKU (Stock Keeping Unit)
     
     produto = limpar_texto(input("\nNome do produto: "))
 
