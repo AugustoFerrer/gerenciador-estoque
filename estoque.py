@@ -46,6 +46,8 @@ def adicionar_item():
     if tipo in ("colchao", "travesseiro"):
         pass
 
+    # TENHO QUE ADICIONAR VERIFICACAO DE INPUT DE COR MATERIAL E PORTAS
+
     elif tipo == "base":
         ficha_infos["cor"] = limpar_texto(input("\nCor: "))
 
@@ -82,15 +84,15 @@ def listar_estoque():
         for tamanho, ficha in tamanho.items():
 
             tipo = ficha["tipo"]
-            cor = ficha.get("cor", "")
-            material = ficha.get("material", "")
-            portas = ficha.get("portas", "")   
+            cor = ficha.get("cor", "-")
+            material = ficha.get("material", "-")
+            portas = ficha.get("portas", "-")   
     
         # tamanho = "Casal"
         # ficha = (ficha_infos)
     
-    #         print(f"produto: {produto} | tamanho: {tamanho} | {ficha}")
-    # print("---------------------")
+            print(f"tipo: {tipo} || produto: {produto} / tamanho: {tamanho} / cor: {cor} / material: {material} / portas: {portas}")
+    print("---------------------")
 
     return
 
