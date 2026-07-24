@@ -30,7 +30,10 @@ def adicionar_item():
     if tipo not in tipos_disponiveis:
         print("\nERRO: Tipo não encontrado")
         return
-    ficha_infos["tipo"] = tipo   
+    ficha_infos["tipo"] = tipo
+
+    if tipo not in estoque:
+        estoque[tipo] = {}   
 
     # MUDAR ARMAZENAMENTO DE CARACTERISTICAS PRA UM SKU (Stock Keeping Unit)
     
@@ -44,8 +47,8 @@ def adicionar_item():
                 print("\nERRO: Tamanho não encontrado")
                 return
         
-    if produto not in estoque:
-        estoque[produto] = {}
+    if produto not in estoque[tipo]:
+        estoque[tipo][produto] = {}
     
     if tipo in ("colchao", "travesseiro"):
         pass
@@ -66,10 +69,29 @@ def adicionar_item():
     qtd = int(input("\nQuantidade: "))
     ficha_infos["qtd"] = qtd
 
-    if tamanho not in estoque[produto]:
-         estoque[produto][tamanho] = ficha_infos
+    # criando chave variante (SKU)
+    caracteristicas = [tamanho]
+
+    if "cor" in ficha_infos:
+        cor = ficha_infos["cor"]
+        caracteristicas.append(cor)
+
+    if "material" in ficha_infos:
+        material = ficha_infos["material"]
+        caracteristicas.append(material)   
+
+    if "portas" in ficha_infos:
+        portas = ficha_infos["portas"]
+        caracteristicas.append(portas)
+
+    chave_sku = "-".join(caracteristicas)     
+
+    # chave criada
+
+    if chave_sku not in estoque[produto]:
+         estoque[tipo][produto][chave_sku] = ficha_infos
     else:
-        estoque[produto][tamanho]["qtd"] += qtd
+        estoque[tipo][produto][chave_sku]["qtd"] += qtd
     
     return
 
@@ -136,8 +158,8 @@ def registrar_venda():
     return
 
 
-while True:
-    print("""
+def mostrar_layout():
+    return("""
     ==============================
         CONTROLE DE ESTOQUE
     ==============================
@@ -147,6 +169,11 @@ while True:
     [4] SAIR
     ==============================
           """)
+
+
+while True:
+
+    mostrar_layout()
     
     opcao = input("Escolha uma opção: ")
 
