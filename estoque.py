@@ -34,8 +34,6 @@ def adicionar_item():
 
     if tipo not in estoque:
         estoque[tipo] = {}   
-
-    # MUDAR ARMAZENAMENTO DE CARACTERISTICAS PRA UM SKU (Stock Keeping Unit)
     
     produto = limpar_texto(input("\nNome do produto: "))
 
@@ -46,6 +44,7 @@ def adicionar_item():
         if tamanho not in tamanhos_disponiveis:
                 print("\nERRO: Tamanho não encontrado")
                 return
+    ficha_infos["tamanho"] = tamanho
         
     if produto not in estoque[tipo]:
         estoque[tipo][produto] = {}
@@ -88,7 +87,7 @@ def adicionar_item():
 
     # chave criada
 
-    if chave_sku not in estoque[produto]:
+    if chave_sku not in estoque[tipo][produto]:
          estoque[tipo][produto][chave_sku] = ficha_infos
     else:
         estoque[tipo][produto][chave_sku]["qtd"] += qtd
@@ -101,24 +100,23 @@ def listar_estoque():
     
     #.items() só recebe 2 variaveis pra separar, então tive que fazer um for dentro de outro pra extrair o dicionario interno (informacoes)
 
-    for produto, tamanho in estoque.items():
-        
-    # Nesse momento:
-    # produto = "bau"
-    # tamanho = ("casal" : ficha_infos) <--- O Python guardou o dicionário de dentro aqui!  
+    for tipo, produto in estoque.items(): 
     
-        for tamanho, ficha in tamanho.items():
+        for produto, chave_sku in produto.items():
 
-            tipo = ficha["tipo"]
-            cor = ficha.get("cor", "-")
-            material = ficha.get("material", "-")
-            portas = ficha.get("portas", "-")   
-    
-        # tamanho = "Casal"
-        # ficha = (ficha_infos)
-    
-            print(f"tipo: {tipo} || produto: {produto} / tamanho: {tamanho} / cor: {cor} / material: {material} / portas: {portas}")
-    print("---------------------")
+            for chave_sku, ficha in chave_sku.items():
+
+                tipo = ficha["tipo"]
+                tamanho = ficha["tamanho"]
+                cor = ficha.get("cor", "-")
+                material = ficha.get("material", "-")
+                portas = ficha.get("portas", "-")   
+        
+            # tamanho = "Casal"
+            # ficha = (ficha_infos)
+        
+                print(f"tipo: {tipo} || produto: {produto} / tamanho: {tamanho} / cor: {cor} / material: {material} / portas: {portas}")
+        print("---------------------")
 
     return
 
@@ -159,7 +157,7 @@ def registrar_venda():
 
 
 def mostrar_layout():
-    return("""
+    print("""
     ==============================
         CONTROLE DE ESTOQUE
     ==============================
