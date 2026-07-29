@@ -31,7 +31,6 @@ def adicionar_item():
         print("\nERRO: Tipo não encontrado")
         return
     ficha_infos["tipo"] = tipo
-
     if tipo not in estoque:
         estoque[tipo] = {}   
     
@@ -44,6 +43,8 @@ def adicionar_item():
         if tamanho not in tamanhos_disponiveis:
                 print("\nERRO: Tamanho não encontrado")
                 return
+        
+    # gurdar apenas tamanho na ficha logo abaixo, tirar tipo e nao por produto pra nao ter redundancia ja que eles são chaves (bug)
     ficha_infos["tamanho"] = tamanho
         
     if produto not in estoque[tipo]:
@@ -98,24 +99,20 @@ def adicionar_item():
 def listar_estoque():
     print("\n--- ESTOQUE ATUAL ---")
     
-    #.items() só recebe 2 variaveis pra separar, então tive que fazer um for dentro de outro pra extrair o dicionario interno (informacoes)
+    #.items() só recebe 2 variaveis pra separar
 
-    for tipo, produto in estoque.items(): 
+    for nome_tipo, diconario_produtos in estoque.items(): 
     
-        for produto, chave_sku in produto.items():
+        for nome_produto, dicionario_skus in diconario_produtos.items():
 
-            for chave_sku, ficha in chave_sku.items():
+            for chave_sku, ficha in dicionario_skus.items():
 
-                tipo = ficha["tipo"]
                 tamanho = ficha["tamanho"]
                 cor = ficha.get("cor", "-")
                 material = ficha.get("material", "-")
                 portas = ficha.get("portas", "-")   
         
-            # tamanho = "Casal"
-            # ficha = (ficha_infos)
-        
-                print(f"tipo: {tipo} || produto: {produto} / tamanho: {tamanho} / cor: {cor} / material: {material} / portas: {portas}")
+                print(f"tipo: {nome_tipo} || produto: {nome_produto} / tamanho: {tamanho} / cor: {cor} / material: {material} / portas: {portas}")
         print("---------------------")
 
     return
@@ -128,31 +125,46 @@ def registrar_venda():
     if id in historico_vendas:
         print("\nERRO: ID já existente")
         return
-    
+
+    tipo = limpar_texto(input("\nNome do tipo vendido: "))
+    if tipo not in estoque:
+        print("\nERRO: Tipo não encontrado")
+        return
+
     produto = limpar_texto(input("\nNome do produto vendido: "))
-    if produto not in estoque:
+    if produto not in estoque[tipo]:
         print("\nERRO: Produto não encontrado")
         return
+
+    # fazendo busca por indice
+    skus_disponiveis = list(estoque[tipo][produto].keys())
     
-    tamanho = limpar_texto(input("\nTamanho: "))  
-    cor = limpar_texto(input("\nCor: "))
-    caracteristicas = (tamanho, cor)
+    for index, sku in enumerate(skus_disponiveis):
+        print(f"{index} - {sku}")
 
-    if caracteristicas not in estoque[produto]:
-        print("\nERRO: Modelo não encontrado")
+    opcao = int(input("\nEscolha a opção: "))
+
+    sku_escolhido = skus_disponiveis[opcao]
+    
+    qtd_vendida = int(input("\nQuantidade vendida: "))
+
+
+    if estoque[tipo][produto][sku_escolhido]["qtd"] < qtd_vendida:
+        print("\nERRO: Quantidade insuficiente no estoque")
         return
-    else:    
-        qtd_vendida = int(input("\nQuantidade vendida: "))
-        
-        if estoque[produto][caracteristicas] < qtd_vendida:
-            print("\nERRO: Quantidade insuficiente no estoque")
-            return
-        else:
-            estoque[produto][caracteristicas] -= qtd_vendida
-            print("\nVenda registrada com sucesso")
+    else:
+        estoque[tipo][produto][sku_escolhido]["qtd"] -= qtd_vendida
 
-            if estoque[produto][caracteristicas] <= 5:
-                print("ATENÇÃO: Estoque baixo para este modelo!")
+        ficha_vendas = estoque[tipo][produto][sku_escolhido].copy()
+        del ficha_vendas["qtd"]
+        ficha_vendas["qtd_vendida"] = qtd_vendida
+        ficha_vendas["vendedor"] = limpar_texto(input("\nVendedor: "))
+        historico_vendas[id] = ficha_vendas
+
+        print("\nVenda registrada com sucesso")
+
+        if estoque[tipo][produto][sku_escolhido]["qtd"] <= 5:
+            print("\nATENÇÃO: Estoque baixo para este modelo!")
     return
 
 
