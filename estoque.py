@@ -35,7 +35,7 @@ def adicionar_item():
         estoque[tipo] = {}   
     
     produto = limpar_texto(input("\nNome do produto: "))
-
+    ficha_infos["produto"] = produto
     if tipo in ("travesseiro", "guarda roupa"):
         tamanho = "unico"
     else:
