@@ -4,7 +4,7 @@ import unicodedata
 
 historico_vendas = {}
 estoque = {}
-tamanhos_disponiveis = ["solteiro", "casal", "queen", "king"]
+tamanhos_disponiveis = ["unico", "solteiro", "casal", "queen", "king"]
 tipos_disponiveis = ["colchao", "base", "bau", "travesseiro", "cabeceira", "guarda roupa"]
 
 
@@ -54,7 +54,7 @@ def adicionar_item_ANTIGO():
         pass
 
     # TENHO QUE ADICIONAR VERIFICACAO DE INPUT DE COR MATERIAL E PORTAS
-
+    # ESSA PARTE ABAIXO VAI FICAR FORA DA LOGICA
     elif tipo == "base":
         ficha_infos["cor"] = limpar_texto(input("\nCor: "))
 
@@ -95,82 +95,50 @@ def adicionar_item_ANTIGO():
     
     return
 
+# TALVEZ EU DEVA CRIAR UMA FUNCAO CHAMADA MONTAR (OU CRIAR) ITEM
 
-
-
-def adicionar_item(tipo, produto, tamanho, cor, material, portas):
-    print("Adicionando item...")
-
-    ficha_infos = {}
+def logica_adicionar_item(tipo, produto, ficha_infos):
     
-    tipo = limpar_texto(input("\nTipo do produto (Ex: Colchão, Base, Baú, Travesseiro...): "))
     if tipo not in tipos_disponiveis:
-        print("\nERRO: Tipo não encontrado")
-        return
-    ficha_infos["tipo"] = tipo
+        return "ERRO: Tipo não encontrado"
+        
     if tipo not in estoque:
         estoque[tipo] = {}   
-    
-    produto = limpar_texto(input("\nNome do produto: "))
-    ficha_infos["produto"] = produto
-    if tipo in ("travesseiro", "guarda roupa"):
-        tamanho = "unico"
-    else:
-        tamanho = limpar_texto(input("\nTamanho: "))
-        if tamanho not in tamanhos_disponiveis:
-                print("\nERRO: Tamanho não encontrado")
-                return
+
+    # JÁ EXISTE NA LISTA, TO ARMAZENANDO NUMA VARIÁVEL
+    qtd_adicionando = ficha_infos["qtd"]
+    tamanho = ficha_infos.get("tamanho", "-")
+    if tamanho not in tamanhos_disponiveis:
+        return "ERRO: Tamanho não encontrado"
         
-    # gurdar apenas tamanho na ficha logo abaixo, tirar tipo e nao por produto pra nao ter redundancia ja que eles são chaves (bug)
-    ficha_infos["tamanho"] = tamanho
+    # gurdar apenas tamanho na ficha_infos, nao colocar tipo e nem produto pra nao ter redundancia (ja que eles são chaves)
         
     if produto not in estoque[tipo]:
         estoque[tipo][produto] = {}
     
-    if tipo in ("colchao", "travesseiro"):
-        pass
-
-    # TENHO QUE ADICIONAR VERIFICACAO DE INPUT DE COR MATERIAL E PORTAS
-
-    elif tipo == "base":
-        ficha_infos["cor"] = limpar_texto(input("\nCor: "))
-
-    elif tipo in ("bau", "cabeceira"):
-        ficha_infos["cor"] = limpar_texto(input("\nCor: "))
-        ficha_infos["material"] = limpar_texto(input("\nMaterial: "))
-
-    elif tipo == "guarda roupa":
-        ficha_infos["cor"] = limpar_texto(input("\nCor: "))
-        ficha_infos["portas"] = limpar_texto(input("\nQuantidade de portas: "))
-       
-    qtd = int(input("\nQuantidade: "))
-    ficha_infos["qtd"] = qtd
-
-    # criando chave variante (SKU)
     caracteristicas = [tamanho]
 
     if "cor" in ficha_infos:
-        cor = ficha_infos["cor"]
+        cor = ficha_infos.get("cor", "-")
         caracteristicas.append(cor)
 
     if "material" in ficha_infos:
-        material = ficha_infos["material"]
+        material = ficha_infos.get("material", "-")
         caracteristicas.append(material)   
 
     if "portas" in ficha_infos:
-        portas = ficha_infos["portas"]
+        portas = ficha_infos.get("portas", "-")
         caracteristicas.append(portas)
 
     chave_sku = "-".join(caracteristicas)     
-
     # chave criada
 
     if chave_sku not in estoque[tipo][produto]:
          estoque[tipo][produto][chave_sku] = ficha_infos
     else:
-        estoque[tipo][produto][chave_sku]["qtd"] += qtd
+        estoque[tipo][produto][chave_sku]["qtd"] += qtd_adicionando
     
-    return
+    return "Item adicionado com sucesso."
 
 
 def listar_estoque():
