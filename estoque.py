@@ -95,7 +95,20 @@ def adicionar_item_ANTIGO():
     
     return
 
-# TALVEZ EU DEVA CRIAR UMA FUNCAO CHAMADA MONTAR (OU CRIAR) ITEM
+def montar_ficha(tamanho, qtd, cor=None, material=None, portas=None):
+    ficha = {
+        "tamanho": tamanho,
+        "qtd": qtd
+    }
+    if cor:
+        ficha["cor"] = cor
+    if material:
+        ficha["material"] = material
+    if portas:
+        ficha["portas"] = portas
+        
+    return ficha
+
 
 def logica_adicionar_item(tipo, produto, ficha_infos):
     
@@ -155,7 +168,7 @@ def listar_estoque():
                 tamanho = ficha["tamanho"]
                 cor = ficha.get("cor", "-")
                 material = ficha.get("material", "-")
-                portas = ficha.get("portas", "-")   
+                portas = ficha.get("portas", "-")
         
                 print(f"tipo: {nome_tipo} || produto: {nome_produto} / tamanho: {tamanho} / cor: {cor} / material: {material} / portas: {portas}")
         print("---------------------")
