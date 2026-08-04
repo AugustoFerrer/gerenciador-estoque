@@ -92,8 +92,30 @@ def adicionar_item_ANTIGO():
          estoque[tipo][produto][chave_sku] = ficha_infos
     else:
         estoque[tipo][produto][chave_sku]["qtd"] += qtd
-    
     return
+
+
+
+def input_dados_item():
+
+    tipo = limpar_texto(input("\nTipo do produto (Ex: Colchão, Base, Baú, Travesseiro...): "))
+    if tipo not in tipos_disponiveis:
+        return "ERRO: Tipo não encontrado"
+    
+    produto = limpar_texto(input("\nNome do produto: "))
+
+    if tipo in ("travesseiro", "guarda roupa"):
+        tamanho = "unico"
+    else:
+        tamanho = limpar_texto(input("\nTamanho: "))
+        if tamanho not in tamanhos_disponiveis:
+            return "ERRO: Tamanho não encontrado"
+
+
+    return
+
+
+
 
 def montar_ficha(tamanho, qtd, cor=None, material=None, portas=None):
     ficha = {
@@ -106,11 +128,11 @@ def montar_ficha(tamanho, qtd, cor=None, material=None, portas=None):
         ficha["material"] = material
     if portas:
         ficha["portas"] = portas
-        
+
     return ficha
 
 
-def logica_adicionar_item(tipo, produto, ficha_infos):
+def add_item_estoque(tipo, produto, ficha_infos):
     
     if tipo not in tipos_disponiveis:
         return "ERRO: Tipo não encontrado"
